@@ -1,0 +1,8 @@
+1. Keep all the files along with Roundabout.MP$ in the same directory.
+2. Move to the directory path from the terminal
+3. pip install -r ../requirements.txt
+4. after installation of every pakage in the txt file is finished.
+5. python main.py
+
+
+Let me know please, if you face any issue
