@@ -2,15 +2,12 @@ import os
 import logging
 import logging.handlers
 import random
-
 import numpy as np
 import skvideo.io
 import cv2
 import matplotlib.pyplot as plt
 import collections
 import utils
-
-
 from pipeline import (
     PipelineRunner,
     ContourDetection,
@@ -22,7 +19,7 @@ from pipeline import (
 refpoints=[]
 IMAGE_DIR = "./out"
 #VIDEO_SOURCE = "input.MP4"
-VIDEO_SOURCE = "Roundabout.MP4"
+VIDEO_SOURCE = "Khare_testvideo_02.avi"
 #SHAPE = (360,640)  # HxW
 '''EXIT_PTS = np.array([
     [[732, 720], [732, 590], [1280, 500], [1280, 720]],
@@ -47,7 +44,6 @@ def selectroi (event, x, y, flags, param):   # function to mark the entry and ex
     global refPt
     global videocntrl
     cnt=0
-
 
     cv2.imshow('SelectROI', firstFrame)
     # if the left mouse button was clicked, record the starting
@@ -96,8 +92,8 @@ def train_bg_subtractor(inst, cap, num=500):
 
 
 
-#*************main function starts here************************8
-#*************main function starts here************************8
+#*************main function starts here************************
+#*************main function starts here************************
 log = utils.init_logging()
 
 if not os.path.exists(IMAGE_DIR):
@@ -138,7 +134,7 @@ pipeline = PipelineRunner(pipeline=[
                      save_image=True, image_dir=IMAGE_DIR),
     # we use y_weight == 2.0 because traffic are moving vertically on video
     # use x_weight == 2.0 for horizontal.
-    VehicleCounter(exit_masks=[exit_mask], y_weight=2.0),
+    VehicleCounter(exit_masks=[exit_mask], yS_weight=2.0),
     Visualizer(image_dir=IMAGE_DIR),
     CsvWriter(path='./', name='report.csv')
 ], log_level=logging.DEBUG)
@@ -150,10 +146,11 @@ _frame_number = -1
 frame_number = -1
 cv2.namedWindow('op', cv2.WINDOW_NORMAL)
 while True:
-    _, frame = cap.read()
-    # for frame in cap:
-    if not frame.any():
-        log.error("Frame capture failed, stopping...")
+    
+    # Read the video frame by frame
+    ret, frame = cap.read()
+    if not ret:
+        print('Error: Could not read frame from video file')
         break
 
     # real frame number
