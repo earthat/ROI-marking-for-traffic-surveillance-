@@ -118,7 +118,7 @@ class ContourDetection(PipelineProcessor):
         matches = []
 
         # finding external contours
-        im2, contours, hierarchy = cv2.findContours(
+        contours, hierarchy = cv2.findContours(
             fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
 
         for (i, contour) in enumerate(contours):
@@ -285,7 +285,9 @@ class VehicleCounter(PipelineProcessor):
         context['objects'] = objects
         context['vehicle_count'] = self.vehicle_count
 
+        #self.log.debug('#VEHICLES FOUND: %s' % context['vehicle_count'])
         self.log.debug('#VEHICLES FOUND: %s' % self.vehicle_count)
+
 
         return context
 
